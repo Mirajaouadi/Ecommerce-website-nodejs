@@ -584,5 +584,73 @@
      
     </script>
     
+    <script>
+     
+      // Définir une requête de connection standard JS
+      var request = new XMLHttpRequest();
+      // Choisir la méthode GET comme une méthode d'accès au serveur et récupérer les données .
+      request.open("GET", "http://127.0.0.1:3000/produits", true);
+      // Load les données à partir de la serveur -> Début connection
+      request.onload = function () {
+        // Begin accessing JSON data here
+        var data = JSON.parse(this.response);
+        var m=0;
+        var w=0;
+        var j = 1;
+        var ee = document.getElementById("bestseller");
+        data.forEach((i) => {
+            if(i.categorie =="woman"){ 
+                w+=1;
+                var ch =`<div class="col-lg-3 col-md-4 col-sm-6 mix women">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="` +i.image + `">
+                            <ul class="product__hover">
+                                <li><a href="product-details.html?id=`+i._id+`"><span class="arrow_expand"></span></a></li>
+                                <li><a href="#"><span class="icon_heart_alt" onclick="favoris('` + i._id +  `')"></span></a></li>
+                                <li><a href="#"><span class="icon_bag_alt" onclick="ajout_panier('` +i._id + `', '` + i.quantite +`')"></span></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><a href="#">` +i.nom + `</a></h6>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <div class="product__price">` +  i.prix + ` Dt</div>
+                        </div>
+                    </div>
+                </div>`;
+                ee.insertAdjacentHTML("beforeend", ch);
+            } else {
+                m+=1;
+                var ch =``;
+                ee.insertAdjacentHTML("beforeend", ch);
+            }
+        });
+        document.getElementById("nb_w").innerHTML = w + " items";
+        document.getElementById("nb_m").innerHTML = m + " items";
+    }
+    
+      // Send request
+      request.send();
+    
+    </script>
+    <script>
+      window.watsonAssistantChatOptions = {
+        integrationID: "695e95fe-c2a9-4bd0-9f5f-eb7848209adc", 
+        region: "au-syd", 
+        serviceInstanceID: "55f3983d-72c3-42cc-8966-6cf67d0fe4ee", 
+        onLoad: async (instance) => { await instance.render(); }
+      };
+      setTimeout(function(){
+        const t=document.createElement('script');
+        t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + (window.watsonAssistantChatOptions.clientVersion || 'latest') + "/WatsonAssistantChatEntry.js";
+        document.head.appendChild(t);
+      });
+    </script>
+
   </body>
 </html>
