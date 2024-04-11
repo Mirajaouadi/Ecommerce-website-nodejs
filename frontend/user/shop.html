@@ -30,6 +30,86 @@
   </head>
   <body>
     <script>
+      document.addEventListener('DOMContentLoaded', function() 
+      {
+        const searchForm = document.getElementById('search-form');
+        if (searchForm) {
+            searchForm.addEventListener('submit', function(event) {
+                // Empêcher le comportement par défaut du formulaire (rechargement de la page)
+                event.preventDefault();
+        
+                // Récupérer la valeur de recherche depuis le champ de saisie
+                const searchInput = document.getElementById('search-input');
+                if (searchInput) {
+                    const searchValue = searchInput.value.trim();
+  
+        document.getElementById("listProd").innerHTML = ``;
+        var min = document.getElementById("minamount").value;
+        var max = document.getElementById("maxamount").value;
+        var request = new XMLHttpRequest();
+        // Open a new connection, using the GET request on the URL endpoint
+        request.open("GET", "http://127.0.0.1:3000/produits", true);
+        request.onload = function () {
+          // Begin accessing JSON data here
+          var data = JSON.parse(this.response);
+          console.log(data);
+          var j = 1;
+          var ee = document.getElementById("listProd");
+          data.forEach((i) => {
+            if ((i.prix >= min) && (i.prix <= max) && (i.sCategorie=searchValue)) {
+              console.log(i._id);
+
+              var ch =
+                `<div class="col-lg-4 col-md-6">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg" data-setbg="` +
+                i.image +
+                `">
+                        <ul class="product__hover">
+                            <li><a href="` +
+                i.image +
+                `" class="image-popup"><span class="arrow_expand"></span></a></li>
+                            <li><a href="#"><span class="icon_heart_alt" onclick="favoris('` +
+                i._id +
+                `')"></span></a></li>
+                            <li><a href="#"><span class="icon_bag_alt" onclick="ajout_panier('` +
+                i._id +
+                `', '` +
+                i.quantite +
+                `')"></span></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="#">` +
+                i.nom +
+                `</a></h6>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product__price">` +
+                i.prix +
+                ` Dt</div>
+                    </div>
+                </div>
+            </div>`;
+
+              ee.insertAdjacentHTML("beforeend", ch);
+            }
+          });
+        };
+        request.send();
+        
+        }
+      });
+      }
+    });
+      
+    </script>
+    <script>
     function filter() {
         document.getElementById("listProd").innerHTML = ``;
         var min = document.getElementById("minamount").value;
@@ -92,7 +172,7 @@
           });
         };
         request.send();
-        //location.reload();
+        
       }
 
   </script>
@@ -113,9 +193,8 @@
           var j = 1;
           var ee = document.getElementById("listProd");
           data.forEach((i) => {
-            console.log(i._id);
             var ch =
-              `<div class="col-lg-4 col-md-6">
+              `<div class="col-lg-4 col-md-6` +i.categorie + ` ` + i.sCategorie + ` ">
                             <div class="product__item">
                                 <div class="product__item__pic set-bg" data-setbg="` +i.image + `">
                                     <ul class="product__hover">
@@ -139,6 +218,8 @@
                         </div>`;
 
             ee.insertAdjacentHTML("beforeend", ch);
+            
+                        
           });
         }
       };
@@ -254,49 +335,12 @@
                 <div class="section-title">
                   <h4>Categories</h4>
                 </div>
-                <div class="categories__accordion">
-                  <div class="accordion" id="accordionExample">
-                    <div class="card">
-                      <div class="card-heading active">
-                        <a data-toggle="collapse" data-target="#collapseOne"
-                          >Women</a
-                        >
-                      </div>
-                      <div
-                        id="collapseOne"
-                        class="collapse show"
-                        data-parent="#accordionExample"
-                      >
-                        <div class="card-body">
-                          <ul>
-                            <li><a href="#">Blouses</a></li>
-                            <li><a href="#">Shirts</a></li>
-                            <li><a href="#">T-shirts</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card">
-                      <div class="card-heading">
-                        <a data-toggle="collapse" data-target="#collapseTwo"
-                          >Men</a
-                        >
-                      </div>
-                      <div
-                        id="collapseTwo"
-                        class="collapse"
-                        data-parent="#accordionExample"
-                      >
-                      <div class="card-body">
-                        <ul>
-                            <li><a href="#">Jackets</a></li>
-                           
-                        </ul>
-                    </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <ul class="filter__controls  " style="display: flex; justify-content: left;">
+                  <li class="active" >All</li>
+                  <li >Women’s</li>
+                  <li >Men’s</li>
+                </ul>
+               
               </div>
               <div class="sidebar__filter">
                 <div class="section-title">
@@ -452,7 +496,7 @@
     <div class="search-model">
       <div class="h-100 d-flex align-items-center justify-content-center">
         <div class="search-close-switch">+</div>
-        <form class="search-model-form">
+        <form class="search-model-form" >
           <input type="text" id="search-input" placeholder="Search here....." />
         </form>
       </div>
@@ -636,69 +680,8 @@
         }
       }
     </script>
-
-    <script>
-      function filter() {
-        document.getElementById("listProd").innerHTML = ``;
-        var min = document.getElementById("minamount").value;
-        var max = document.getElementById("maxamount").value;
-        // Create a request variable and assign a new XMLHttpRequest object to it.
-        var request = new XMLHttpRequest();
-        // Open a new connection, using the GET request on the URL endpoint
-        request.open("GET", "http://127.0.0.1:3000/produits", true);
-        request.onload = function () {
-          // Begin accessing JSON data here
-          var data = JSON.parse(this.response);
-          console.log(data);
-          var j = 1;
-          var ee = document.getElementById("listProd");
-          data.forEach((i) => {
-            if (min < i.prix && i.prix > max) {
-              console.log(i._id);
-              var ch =
-                `<div class="col-lg-4 col-md-6">
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="` +
-                i.image +
-                `">
-                        <ul class="product__hover">
-                            <li><a href="` +
-                i.image +
-                `" class="image-popup"><span class="arrow_expand"></span></a></li>
-                            <li><a href="#"><span class="icon_heart_alt" onclick="favoris('` +
-                i._id +
-                `')"></span></a></li>
-                            <li><a href="#"><span class="icon_bag_alt" onclick="ajout_panier('` +
-                i._id +
-                `', '` +
-                i.quantite +
-                `')"></span></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6><a href="#">` +
-                i.nom +
-                `</a></h6>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <div class="product__price">` +
-                i.prix +
-                ` Dt</div>
-                    </div>
-                </div>
-            </div>`;
-
-              ee.insertAdjacentHTML("beforeend", ch);
-            }
-          });
-        };
-        request.send();
-      }
-    </script>
+<script>
+   
+</script>
   </body>
 </html>

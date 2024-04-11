@@ -31,7 +31,81 @@
 
   </head>
 
-  <body onload="showAll()">
+  <body>
+    <script>
+     
+      // Définir une requête de connection standard JS
+      var request = new XMLHttpRequest();
+      // Choisir la méthode GET comme une méthode d'accès au serveur et récupérer les données .
+      request.open("GET", "http://127.0.0.1:3000/produits", true);
+      // Load les données à partir de la serveur -> Début connection
+      request.onload = function () {
+        // Begin accessing JSON data here
+        var data = JSON.parse(this.response);
+        var m=0;
+        var w=0;
+        var j = 1;
+        var ee = document.getElementById("bestseller");
+        data.forEach((i) => {
+          if(i.categorie =="woman"){ 
+            w+=1;
+            var ch =`<div class="col-lg-3 col-md-4 col-sm-6 mix women">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg" data-setbg="` +i.image + `">
+                        <ul class="product__hover">
+                            <li><a href="product-details.html?id=`+i._id+`"><span class="arrow_expand"></span></a></li>
+                            <li><a href="#"><span class="icon_heart_alt" onclick="favoris('` + i._id +  `')"></span></a></li>
+                            <li><a href="#"><span class="icon_bag_alt" onclick="ajout_panier('` +i._id + `', '` + i.quantite +`')"></span></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="#">` +i.nom + `</a></h6>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product__price">` +  i.prix + ` Dt</div>
+                    </div>
+                </div>
+            </div>`;
+            ee.insertAdjacentHTML("beforeend", ch);
+           }
+         else{m+=1;
+          var ch =`<div class="col-lg-3 col-md-4 col-sm-6 mix men">
+            <div class="product__item">
+                <div class="product__item__pic set-bg" data-setbg="` +i.image + `">
+                    <ul class="product__hover">
+                        <li><a href="product-details.html?id=`+i._id+`"><span class="arrow_expand"></span></a></li>
+                        <li><a href="#"><span class="icon_heart_alt" onclick="favoris('` + i._id +  `')"></span></a></li>
+                        <li><a href="#"><span class="icon_bag_alt" onclick="ajout_panier('` +i._id + `', '` + i.quantite +`')"></span></a></li>
+                    </ul>
+                </div>
+                <div class="product__item__text">
+                    <h6><a href="#">` +i.nom + `</a></h6>
+                    <div class="rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                    </div>
+                    <div class="product__price">` +  i.prix + ` Dt</div>
+                </div>
+            </div>
+        </div>`;
+          ee.insertAdjacentHTML("beforeend", ch);}
+              });
+               document.getElementById("nb_w").innerHTML = w +" items";
+               document.getElementById("nb_m").innerHTML = m +" items";
+            };
+      // Send request
+      request.send();
+     
+    </script>
+
     <!-- Page Preloder -->
     <div id="preloder">
       <div class="loader"></div>
@@ -224,7 +298,7 @@
         <div class="row">
           <div class="col-lg-6 p-0">
             <div class="discount__pic">
-              <img src="image/miniSkirt.png" style="height: 390px ;" alt="" />
+              <img src="image/2.png" style="height: 390px ;" alt="" />
             </div>
           </div>
           <div class="col-lg-6 p-0">
@@ -252,7 +326,7 @@
                   <p>Sec</p>
                 </div>
               </div>
-              <a href="#">Shop now</a>
+              <a href="shop.html">Shop now</a>
             </div>
           </div>
         </div>
@@ -509,58 +583,6 @@
       request.send();
      
     </script>
-    <script>
-     
-      // Définir une requête de connection standard JS
-      var request = new XMLHttpRequest();
-      // Choisir la méthode GET comme une méthode d'accès au serveur et récupérer les données .
-      request.open("GET", "http://127.0.0.1:3000/produits", true);
-      // Load les données à partir de la serveur -> Début connection
-      request.onload = function () {
-        // Begin accessing JSON data here
-        var data = JSON.parse(this.response);
-        var m=0;
-        var w=0;
-        var j = 1;
-        var ee = document.getElementById("bestseller");
-        data.forEach((i) => {
-          if(i.categorie =="woman"){ 
-            w+=1;
-            var ch =`<div class="col-lg-3 col-md-4 col-sm-6 mix women">
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="` +i.image + `">
-                        <ul class="product__hover">
-                            <li><a href="product-details.html?id=`+i._id+`"><span class="arrow_expand"></span></a></li>
-                            <li><a href="#"><span class="icon_heart_alt" onclick="favoris('` + i._id +  `')"></span></a></li>
-                            <li><a href="#"><span class="icon_bag_alt" onclick="ajout_panier('` +i._id + `', '` + i.quantite +`')"></span></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6><a href="#">` +i.nom + `</a></h6>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <div class="product__price">` +  i.prix + ` Dt</div>
-                    </div>
-                </div>
-            </div>``;
-            ee.insertAdjacentHTML("beforeend", ch);
-           }
-         else{m+=1;
-          var ch =``;
-          ee.insertAdjacentHTML("beforeend", ch);}
-              });
-               document.getElementById("nb_w").innerHTML = w +" items";
-               document.getElementById("nb_m").innerHTML = m +" items";
-            };
-      // Send request
-      request.send();
-     
-    </script>
-
+    
   </body>
 </html>
