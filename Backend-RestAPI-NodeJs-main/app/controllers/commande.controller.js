@@ -65,7 +65,7 @@ exports.findOne = (req, res) => {
 // Update a commande identified by the commandeId in the request
 exports.update = (req, res) => {
     // Validate Request
-    if(!req.body.idUser) {
+    if(!req.body.status) {
         return res.status(400).send({
             message: "commande content can not be empty"
         });

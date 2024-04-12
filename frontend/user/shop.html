@@ -74,8 +74,6 @@
                 `')"></span></a></li>
                             <li><a href="#"><span class="icon_bag_alt" onclick="ajout_panier('` +
                 i._id +
-                `', '` +
-                i.quantite +
                 `')"></span></a></li>
                         </ul>
                     </div>
@@ -144,8 +142,6 @@
                 `')"></span></a></li>
                             <li><a href="#"><span class="icon_bag_alt" onclick="ajout_panier('` +
                 i._id +
-                `', '` +
-                i.quantite +
                 `')"></span></a></li>
                         </ul>
                     </div>
@@ -200,7 +196,7 @@
                                     <ul class="product__hover">
                                         <li><a href="product-details.html?id=`+i._id+`"><span class="arrow_expand"></span></a></li>
                                         <li><a href="#"><span class="icon_heart_alt" onclick="favoris('` + i._id +  `')"></span></a></li>
-                                        <li><a href="#"><span class="icon_bag_alt" onclick="ajout_panier('` +i._id + `', '` + i.quantite +`')"></span></a></li>
+                                        <li><a href="#"><span class="icon_bag_alt" onclick="ajout_panier('` +i._id + `')"></span></a></li>
                                     </ul>
                                 </div>
                                 <div class="product__item__text">
@@ -281,9 +277,8 @@
           </div>
           <div class="col-lg-3">
             <div class="header__right">
-              <div class="header__right__auth">
-                <a href="signin.html">Login</a>
-                <a href="signup.html">Register</a>
+              <div class="header__right__auth"  id="menuu">
+                
               </div>
               <ul class="header__right__widget">
                 <li><span class="icon_search search-switch"></span></li>
@@ -294,7 +289,7 @@
                   </a>
                 </li>
                 <li>
-                  <a href="#"
+                  <a href="shop-cart.html"
                     ><span class="icon_bag_alt"></span>
                     <div class="tip" id="lengthPanier"></div>
                   </a>
@@ -528,7 +523,7 @@
     </script>
 
     <script>
-      function ajout_panier(idP, qt) {
+      function ajout_panier(idP) {
         // Vérifier si l'utilisateur est authentifié
         var idUser = localStorage.getItem("idU");
         if (!idUser) {
@@ -550,7 +545,7 @@
           });
           return; // Arrêter l'exécution de la fonction
         }
-        if (qt != 0) {
+       
           var url = "http://127.0.0.1:3000/paniers";
           var data = {
             idUser: idUser,
@@ -574,10 +569,8 @@
             }
           };
           xhr.send(json);
-        } else {
-          window.confirm("out of stock");
-        }
-      }
+        } 
+      
 
       function redirectt() {
         var d = window.confirm("Go to cart");
@@ -680,8 +673,14 @@
         }
       }
     </script>
-<script>
-   
-</script>
+    <script>
+      if (!localStorage.getItem("idU")) {
+        document.getElementById( "menuu").innerHTML += `<a href="signin.html">Login</a>
+                                                       <a href="signup.html">Register</a>`;
+      } else {
+        document.getElementById("menuu").innerHTML += ` <a  href="#" >` + localStorage.getItem(" username") +`</a>
+                                                          <a href="#" onclick="logout()" >Logout</a>`;
+      }
+    </script>
   </body>
 </html>

@@ -31,6 +31,7 @@
         var url = new URL(url_string);
         var c = url.searchParams.get("id");
         console.log(c);
+       
        var categ;
         // Post a user
         var url3 = "http://127.0.0.1:3000/produits/" + c;
@@ -48,6 +49,7 @@
             document.getElementById("descp").innerHTML = data.description;
             document.getElementById("imgp").src = data.image;
             categ=data.sCategorie;
+
           } else {
             console.log("error");
           }
@@ -114,7 +116,7 @@
             }
           };
           request.send();
-            function ajout_panier() {
+            function ajout_panier(id) {
                 // Vérifier si l'utilisateur est authentifié
                 var nb=document.getElementById("qte").value;
                 var idUser = localStorage.getItem("idU");
@@ -137,13 +139,13 @@
                     });
                     return; // Arrêter l'exécution de la fonction
                 }
-                if(qt!=0){
+               
                
                 var url = "http://127.0.0.1:3000/paniers";
                 var data = {
                     idUser: idUser,
-                    idProduit: c,
-                    quantite: 1
+                    idProduit: id,
+                    quantite: nb
                 };
                 var json = JSON.stringify(data);
                 var xhr = new XMLHttpRequest();
@@ -159,18 +161,18 @@
                     }
                 };
                 xhr.send(json);
-            }
-            else{  window.confirm("out of stock");  }
+            
+           
             }
             
             function redirectt() {
                 var d = window.confirm("Go to cart");
                 if (d == true) {
-                    location.replace("shop-cart.html");
+                    location.replace("shop.html");
                 }
             }
             
-            function favoris() {
+            function favoris(id) {
                 var idUser = localStorage.getItem("idU");
                 if (!idUser) {
                   // Si l'utilisateur n'est pas authentifié, afficher une alerte stylisée
@@ -195,7 +197,7 @@
                 var url = "http://127.0.0.1:3000/favorites";
                 var data = {
                   user: idUser,
-                  produit: c,
+                  produit: id,
                 };
                 var json = JSON.stringify(data);
                 var xhr = new XMLHttpRequest();

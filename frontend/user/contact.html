@@ -75,16 +75,15 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="header__right">
-                        <div class="header__right__auth">
-                            <a href="signin.html">Login</a>
-                            <a href="signup.html">Register</a>
+                        <div class="header__right__auth" id="menuu">
+                            
                         </div>
                         <ul class="header__right__widget">
                             <li><span class="icon_search search-switch"></span></li>
                             <li><a href="favorite.html"><span class="icon_heart_alt"></span>
                                 <div class="tip" id="lengthFav"></div>
                             </a></li>
-                            <li><a href="#"><span class="icon_bag_alt"></span>
+                            <li><a href="shop-cart.html"><span class="icon_bag_alt"></span>
                                 <div class="tip" id="lengthPanier"></div>
                             </a></li>
                         </ul>
@@ -336,6 +335,15 @@
     // Send request
     request.send();
    
+  </script>
+  <script>
+    if (!localStorage.getItem("idU")) {
+      document.getElementById( "menuu").innerHTML += `<a href="signin.html">Login</a>
+                                                     <a href="signup.html">Register</a>`;
+    } else {
+      document.getElementById("menuu").innerHTML += ` <a  href="#" >` + localStorage.getItem(" username") +`</a>
+                                                        <a href="#" onclick="logout()" >Logout</a>`;
+    }
   </script>
 </body>
 

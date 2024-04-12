@@ -17,7 +17,6 @@
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
-
     <!-- Css Styles -->
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css" />
@@ -103,9 +102,8 @@
             };
       // Send request
       request.send();
-     
     </script>
-
+  
     <!-- Page Preloder -->
     <div id="preloder">
       <div class="loader"></div>
@@ -140,7 +138,6 @@
       </div>
     </div>
     <!-- Offcanvas Menu End -->
-
     <!-- Header Section Begin -->
     <header class="header">
       <div class="container-fluid">
@@ -169,7 +166,7 @@
                           <li><a href="favorite.html"><span class="icon_heart_alt"></span>
                               <div class="tip" id="lengthFav"></div>
                           </a></li>
-                          <li><a href="#"><span class="icon_bag_alt"></span>
+                          <li><a href="shop-cart.html"><span class="icon_bag_alt"></span>
                               <div class="tip" id="lengthPanier"></div>
                           </a></li>
                       </ul>
@@ -521,8 +518,7 @@
           location.href = "signin.html";
         }
       }
-      document.getElementById("user").innerHTML =
-        localStorage.getItem("usernameU");
+    
     </script>
 
     
@@ -531,7 +527,7 @@
         document.getElementById( "menuu").innerHTML += `<a href="signin.html">Login</a>
                                                        <a href="signup.html">Register</a>`;
       } else {
-        document.getElementById("menuu").innerHTML += ` <a  href="#" >` + localStorage.getItem("usernameU") +`</a>
+        document.getElementById("menuu").innerHTML += ` <a  href="#" >` + localStorage.getItem(" username") +`</a>
                                                           <a href="#" onclick="logout()" >Logout</a>`;
       }
     </script>
@@ -584,60 +580,7 @@
      
     </script>
     
-    <script>
-     
-      // Définir une requête de connection standard JS
-      var request = new XMLHttpRequest();
-      // Choisir la méthode GET comme une méthode d'accès au serveur et récupérer les données .
-      request.open("GET", "http://127.0.0.1:3000/produits", true);
-      // Load les données à partir de la serveur -> Début connection
-      request.onload = function () {
-        // Begin accessing JSON data here
-        var data = JSON.parse(this.response);
-        var m=0;
-        var w=0;
-        var j = 1;
-        var ee = document.getElementById("bestseller");
-        data.forEach((i) => {
-            if(i.categorie =="woman"){ 
-                w+=1;
-                var ch =`<div class="col-lg-3 col-md-4 col-sm-6 mix women">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="` +i.image + `">
-                            <ul class="product__hover">
-                                <li><a href="product-details.html?id=`+i._id+`"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt" onclick="favoris('` + i._id +  `')"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt" onclick="ajout_panier('` +i._id + `', '` + i.quantite +`')"></span></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">` +i.nom + `</a></h6>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                            </div>
-                            <div class="product__price">` +  i.prix + ` Dt</div>
-                        </div>
-                    </div>
-                </div>`;
-                ee.insertAdjacentHTML("beforeend", ch);
-            } else {
-                m+=1;
-                var ch =``;
-                ee.insertAdjacentHTML("beforeend", ch);
-            }
-        });
-        document.getElementById("nb_w").innerHTML = w + " items";
-        document.getElementById("nb_m").innerHTML = m + " items";
-    }
-    
-      // Send request
-      request.send();
-    
-    </script>
+   
     <script>
       window.watsonAssistantChatOptions = {
         integrationID: "695e95fe-c2a9-4bd0-9f5f-eb7848209adc", 
