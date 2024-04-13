@@ -83,14 +83,12 @@
                             <li><a href="` +
                 i.image +
                 `" class="image-popup"><span class="arrow_expand"></span></a></li>
-                            <li><a href="#"><span class="icon_heart_alt" onclick="favoris('` +
+                            <li><a href="#"><span class="icon_heart_alt" onclick="favoris(` +
                 i._id +
-                `')"></span></a></li>
-                            <li><a href="#"><span class="icon_bag_alt" onclick="ajout_panier('` +
+                `)"></span></a></li>
+                            <li><a href="#"><span class="icon_bag_alt" onclick="ajout_panier(` +
                 i._id +
-                `', '` +
-                i.quantite +
-                `')"></span></a></li>
+                `)"></span></a></li>
                         </ul>
                         </div>
                         <div class="product__item__text">
@@ -116,113 +114,6 @@
             }
           };
           request.send();
-            function ajout_panier(id) {
-                // Vérifier si l'utilisateur est authentifié
-                var nb=document.getElementById("qte").value;
-                var idUser = localStorage.getItem("idU");
-                if (!idUser) {
-                    // Si l'utilisateur n'est pas authentifié, afficher une alerte stylisée
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'You need to login or create an account first',
-                        showCancelButton: true,
-                        confirmButtonText: 'Login',
-                        cancelButtonText: 'Create account'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Rediriger vers la page de connexion
-                            location.replace("signin.html");
-                        } else if (result.dismiss === Swal.DismissReason.cancel) {
-                            // Rediriger vers la page de création de compte
-                            location.replace("signup.html");
-                        }
-                    });
-                    return; // Arrêter l'exécution de la fonction
-                }
-               
-               
-                var url = "http://127.0.0.1:3000/paniers";
-                var data = {
-                    idUser: idUser,
-                    idProduit: id,
-                    quantite: nb
-                };
-                var json = JSON.stringify(data);
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", url, true);
-                xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
-                xhr.onload = function () {
-                    if (xhr.readyState == 4 && xhr.status == "200") {
-                        alert("Element Added");
-                        redirectt();
-                    } else {
-                        alert("Error: " + xhr.statusText);
-                        console.table(JSON.parse(xhr.responseText));
-                    }
-                };
-                xhr.send(json);
-            
-           
-            }
-            
-            function redirectt() {
-                var d = window.confirm("Go to cart");
-                if (d == true) {
-                    location.replace("shop.html");
-                }
-            }
-            
-            function favoris(id) {
-                var idUser = localStorage.getItem("idU");
-                if (!idUser) {
-                  // Si l'utilisateur n'est pas authentifié, afficher une alerte stylisée
-                  Swal.fire({
-                    icon: "info",
-                    title: "You need to login or create an account first",
-                    showCancelButton: true,
-                    confirmButtonText: "Login",
-                    cancelButtonText: "Create account",
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      // Rediriger vers la page de connexion
-                      location.replace("signin.html");
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                      // Rediriger vers la page de création de compte
-                      location.replace("signup.html");
-                    }
-                  });
-                  return; // Arrêter l'exécution de la fonction
-                }
-        
-                var url = "http://127.0.0.1:3000/favorites";
-                var data = {
-                  user: idUser,
-                  produit: id,
-                };
-                var json = JSON.stringify(data);
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", url, true);
-                xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
-                xhr.onload = function () {
-                  if (xhr.readyState == 4 && xhr.status == "200") {
-                    alert("Element Added to the favorite list");
-                    redirect();
-                  } else {
-                    alert("Error: " + xhr.statusText);
-                    console.table(JSON.parse(xhr.responseText));
-                  }
-                };
-                xhr.send(json);
-              }
-        
-              function redirect() {
-                var d = window.confirm("Go to favorites");
-                if (d == true) {
-                  location.replace("favorite.html");
-                }
-              }
-              
-    
     </script>
     
     <!-- Page Preloder -->
@@ -339,9 +230,9 @@
                                     <input type="text" value="1" id="qte">
                                 </div>
                             </div>
-                            <a href="#" class="cart-btn" onclick="ajout_panier()"><span class="icon_bag_alt"></span> Add to cart</a>
+                            <a href="#" class="cart-btn" onclick="panier()"><span class="icon_bag_alt"></span> Add to cart</a>
                             <ul>
-                                <li><a href="#"><span class="icon_heart_alt" onclick="fvoris()"></span></a></li>
+                                <li><a href="#"><span class="icon_heart_alt" onclick="fav()"></span></a></li>
                                  
                             </ul>
                         </div>
@@ -561,7 +452,228 @@
         request.send();
        
       </script>
-
+      <script>
+        function favoris(idp) {
+          var idUser = localStorage.getItem("idU");
+          if (!idUser) {
+            // Si l'utilisateur n'est pas authentifié, afficher une alerte stylisée
+            Swal.fire({
+              icon: "info",
+              title: "You need to login or create an account first",
+              showCancelButton: true,
+              confirmButtonText: "Login",
+              cancelButtonText: "Create account",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Rediriger vers la page de connexion
+                location.replace("signin.html");
+              } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // Rediriger vers la page de création de compte
+                location.replace("signup.html");
+              }
+            });
+            return; // Arrêter l'exécution de la fonction
+          }
+  
+          var url = "http://127.0.0.1:3000/favorites";
+          var data = {
+            user: idUser,
+            produit: idp,
+          };
+          var json = JSON.stringify(data);
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", url, true);
+          xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
+          xhr.onload = function () {
+            if (xhr.readyState == 4 && xhr.status == "200") {
+              alert("Element Added to the favorite list");
+              redirect();
+            } else {
+              alert("Error: " + xhr.statusText);
+              console.table(JSON.parse(xhr.responseText));
+            }
+          };
+          xhr.send(json);
+        }
+  
+        function redirect() {
+          var d = window.confirm("Go to favorites");
+          if (d == true) {
+            location.replace("favorite.html");
+          }
+        }
+      </script>
+      <script>
+        function ajout_panier(idP) {
+          // Vérifier si l'utilisateur est authentifié
+          var idUser = localStorage.getItem("idU");
+          if (!idUser) {
+            // Si l'utilisateur n'est pas authentifié, afficher une alerte stylisée
+            Swal.fire({
+              icon: "info",
+              title: "You need to login or create an account first",
+              showCancelButton: true,
+              confirmButtonText: "Login",
+              cancelButtonText: "Create account",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Rediriger vers la page de connexion
+                location.replace("signin.html");
+              } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // Rediriger vers la page de création de compte
+                location.replace("signup.html");
+              }
+            });
+            return; // Arrêter l'exécution de la fonction
+          }
+         
+            var url = "http://127.0.0.1:3000/paniers";
+            var data = {
+              idUser: idUser,
+              idProduit: idP,
+              quantite: 1,
+            };
+            var json = JSON.stringify(data);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader(
+              "Content-type",
+              "application/json; charset=utf-8"
+            );
+            xhr.onload = function () {
+              if (xhr.readyState == 4 && xhr.status == "200") {
+                alert("Element Added");
+                redirectt();
+              } else {
+                alert("Error: " + xhr.statusText);
+                console.table(JSON.parse(xhr.responseText));
+              }
+            };
+            xhr.send(json);
+          } 
+        
+  
+        function redirectt() {
+          var d = window.confirm("Go to cart");
+          if (d == true) {
+            location.replace("shop-cart.html");
+          }
+        }
+      </script>
+      <script>
+        function fav() {
+            var idUser = localStorage.getItem("idU");
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var idp = url.searchParams.get("id");
+            if (!idUser) {
+              // Si l'utilisateur n'est pas authentifié, afficher une alerte stylisée
+              Swal.fire({
+                icon: "info",
+                title: "You need to login or create an account first",
+                showCancelButton: true,
+                confirmButtonText: "Login",
+                cancelButtonText: "Create account",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  // Rediriger vers la page de connexion
+                  location.replace("signin.html");
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                  // Rediriger vers la page de création de compte
+                  location.replace("signup.html");
+                }
+              });
+              return; // Arrêter l'exécution de la fonction
+            }
+    
+            var url = "http://127.0.0.1:3000/favorites";
+            var data = {
+              user: idUser,
+              produit: idp,
+            };
+            var json = JSON.stringify(data);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
+            xhr.onload = function () {
+              if (xhr.readyState == 4 && xhr.status == "200") {
+                alert("Element Added to the favorite list");
+                redirect();
+              } else {
+                alert("Error: " + xhr.statusText);
+                console.table(JSON.parse(xhr.responseText));
+              }
+            };
+            xhr.send(json);
+          }
+    
+          function redirect() {
+            var d = window.confirm("Go to favorites");
+            if (d == true) {
+              location.replace("favorite.html");
+            }
+          }  
+      </script>
+      <script>
+        function panier() {
+          // Vérifier si l'utilisateur est authentifié
+          var idUser = localStorage.getItem("idU");
+          var url_string = window.location.href;
+          var url = new URL(url_string);
+          var idp = url.searchParams.get("id");
+          if (!idUser) {
+            // Si l'utilisateur n'est pas authentifié, afficher une alerte stylisée
+            Swal.fire({
+              icon: "info",
+              title: "You need to login or create an account first",
+              showCancelButton: true,
+              confirmButtonText: "Login",
+              cancelButtonText: "Create account",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Rediriger vers la page de connexion
+                location.replace("signin.html");
+              } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // Rediriger vers la page de création de compte
+                location.replace("signup.html");
+              }
+            });
+            return; // Arrêter l'exécution de la fonction
+          }
+         
+            var url = "http://127.0.0.1:3000/paniers";
+            var data = {
+              idUser: idUser,
+              idProduit: idp,
+              quantite: 1,
+            };
+            var json = JSON.stringify(data);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader(
+              "Content-type",
+              "application/json; charset=utf-8"
+            );
+            xhr.onload = function () {
+              if (xhr.readyState == 4 && xhr.status == "200") {
+                alert("Element Added");
+                redirectt();
+              } else {
+                alert("Error: " + xhr.statusText);
+                console.table(JSON.parse(xhr.responseText));
+              }
+            };
+            xhr.send(json);
+          } 
+        
+  
+        function redirectt() {
+          var d = window.confirm("Go to cart");
+          if (d == true) {
+            location.replace("shop-cart.html");
+          }
+        }
+      </script>
 </body>
 
 </html>

@@ -69,24 +69,21 @@
                         <ul>
                             <li ><a href="./index.html">Home</a></li>
                             <li class="active"><a href="./shop.html">Shop</a></li>
-                            <li><a href="./shopWomen.html">Women’s</a></li>
-                            <li><a href="./shopMen.html">Men’s</a></li>
                             <li><a href="./contact.html">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
                 <div class="col-lg-3">
                     <div class="header__right">
-                        <div class="header__right__auth">
-                            <a href="#">Login</a>
-                            <a href="#">Register</a>
+                        <div class="header__right__auth" id="menuu">
+                           
                         </div>
                         <ul class="header__right__widget">
                             <li><span class="icon_search search-switch"></span></li>
                             <li><a href="favorite.html"><span class="icon_heart_alt"></span>
                                 <div class="tip" id="lengthFav"></div>
                             </a></li>
-                            <li><a href="#"><span class="icon_bag_alt"></span>
+                            <li><a href="shop-cart.html"><span class="icon_bag_alt"></span>
                                 <div class="tip" id="lengthPanier"></div>
                             </a></li>
                         </ul>
@@ -290,11 +287,11 @@
         request.onload = function () {
           // Begin accessing JSON data here
           var data = JSON.parse(this.response);
-          //var table = document.getElementById("cartItems");
+          var table = document.getElementById("listFav");
           console.log(data);
           var j = 0;
           data.forEach((i) => {
-            if(i.idUser == localStorage.getItem("idU")){
+            if(i.user == localStorage.getItem("idU")){
             // Insérer une ligne dans le tableau
             var row = table.insertRow(-1);
             // Insérer des cellules dans le tableau
@@ -306,13 +303,13 @@
            
             // Récupérer les données du produit correspondant à l'idProduit de la table produit
             $.getJSON(
-              "http://127.0.0.1:3000/produits/" + i.Produit,
+              "http://127.0.0.1:3000/produits/" + i.produit,
               function (prod) {
             cell1.innerHTML = ` <div class="media"  id="paniers">
                 <input type="hidden" class="iddc" value="`+i._id+`">
-                <input type="hidden" class="iddp" value="`+i.idProduit+`">
+                <input type="hidden" class="iddp" value="`+i.produit+`">
                 <div class="cart__product__item">
-                <img src="`+prod.image+`" alt="">
+                <img src="`+prod.image+`" alt=""  style="height: 90px; width: 90px">
                 <div class="cart__product__item__title">
                     <h6>`+prod.nom+`</h6>
                 </div> 
@@ -324,7 +321,7 @@
                   </div>`;
             cell3.innerHTML = `<div class="cart__price">`+prod.prix+`Dt</div>`;
              cell4.innerHTML =`<div class="cart__close"><span class="icon_close" onclick="removeItem('`+i._id+`')"></span></div> `;
-             cell5.innerHTML =`<div class="cart__close"><i class="fa fa-cart-plus" aria-hidden="true" onclick="addItem('`+i._id+`')"></i></div> `;
+             cell5.innerHTML =`<div class="cart__close"><i class="fa fa-cart-plus" aria-hidden="true" onclick="addItem('`+prod._id+`')"></i></div> `;
             
             }
             );

@@ -594,6 +594,114 @@
         document.head.appendChild(t);
       });
     </script>
+    <script>
+      function favoris(idp) {
+        var idUser = localStorage.getItem("idU");
+        if (!idUser) {
+          // Si l'utilisateur n'est pas authentifié, afficher une alerte stylisée
+          Swal.fire({
+            icon: "info",
+            title: "You need to login or create an account first",
+            showCancelButton: true,
+            confirmButtonText: "Login",
+            cancelButtonText: "Create account",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // Rediriger vers la page de connexion
+              location.replace("signin.html");
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+              // Rediriger vers la page de création de compte
+              location.replace("signup.html");
+            }
+          });
+          return; // Arrêter l'exécution de la fonction
+        }
+
+        var url = "http://127.0.0.1:3000/favorites";
+        var data = {
+          user: idUser,
+          produit: idp,
+        };
+        var json = JSON.stringify(data);
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
+        xhr.onload = function () {
+          if (xhr.readyState == 4 && xhr.status == "200") {
+            alert("Element Added to the favorite list");
+            redirect();
+          } else {
+            alert("Error: " + xhr.statusText);
+            console.table(JSON.parse(xhr.responseText));
+          }
+        };
+        xhr.send(json);
+      }
+
+      function redirect() {
+        var d = window.confirm("Go to favorites");
+        if (d == true) {
+          location.replace("favorite.html");
+        }
+      }
+    </script>
+    <script>
+      function ajout_panier(idP) {
+        // Vérifier si l'utilisateur est authentifié
+        var idUser = localStorage.getItem("idU");
+        if (!idUser) {
+          // Si l'utilisateur n'est pas authentifié, afficher une alerte stylisée
+          Swal.fire({
+            icon: "info",
+            title: "You need to login or create an account first",
+            showCancelButton: true,
+            confirmButtonText: "Login",
+            cancelButtonText: "Create account",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // Rediriger vers la page de connexion
+              location.replace("signin.html");
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+              // Rediriger vers la page de création de compte
+              location.replace("signup.html");
+            }
+          });
+          return; // Arrêter l'exécution de la fonction
+        }
+       
+          var url = "http://127.0.0.1:3000/paniers";
+          var data = {
+            idUser: idUser,
+            idProduit: idP,
+            quantite: 1,
+          };
+          var json = JSON.stringify(data);
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", url, true);
+          xhr.setRequestHeader(
+            "Content-type",
+            "application/json; charset=utf-8"
+          );
+          xhr.onload = function () {
+            if (xhr.readyState == 4 && xhr.status == "200") {
+              alert("Element Added");
+              redirectt();
+            } else {
+              alert("Error: " + xhr.statusText);
+              console.table(JSON.parse(xhr.responseText));
+            }
+          };
+          xhr.send(json);
+        } 
+      
+
+      function redirectt() {
+        var d = window.confirm("Go to cart");
+        if (d == true) {
+          location.replace("shop-cart.html");
+        }
+      }
+    </script>
 
   </body>
 </html>
